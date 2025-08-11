@@ -26,6 +26,11 @@
                 </flux:navlist.item>
             </flux:navlist.group>
 
+            <flux:navlist.item icon="shopping-cart" :href="route('cart')" :current="request()->routeIs('cart')"
+                wire:navigate>
+                {{ __('Cart') }}
+            </flux:navlist.item>
+
             @guest
                 <flux:navlist.group :heading="__('Account')" class="grid">
                     <flux:navlist.item :href="route('login')" icon="arrow-right" wire:navigate>
