@@ -1,15 +1,16 @@
 <?php
 
-use Illuminate\Auth\Events\Lockout;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\RateLimiter;
-use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Session;
+use App\Models\Cart;
 use Illuminate\Support\Str;
-use Illuminate\Validation\ValidationException;
+use Livewire\Volt\Component;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Validate;
-use Livewire\Volt\Component;
+use Illuminate\Auth\Events\Lockout;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Validation\ValidationException;
 
 new #[Layout('components.layouts.auth')] class extends Component {
     #[Validate('required|string|email')]
@@ -37,8 +38,30 @@ new #[Layout('components.layouts.auth')] class extends Component {
             ]);
         }
 
-        RateLimiter::clear($this->throttleKey());
+        $oldSessionId = session()->getId();
+
         Session::regenerate();
+        $newSessionId = session()->getId();
+
+        $userCart = Cart::where('user_id', Auth::id())->first();
+
+        $guestCart = Cart::where('session_id', $oldSessionId)->first();
+
+        if (!$userCart && $guestCart) {
+            $guestCart->update([
+                'user_id' => Auth::id(),
+                'session_id' => $newSessionId,
+            ]);
+        } elseif ($userCart && $guestCart) {
+            $guestCourseIds = $guestCart->courses()->pluck('courses.id');
+            $userCart->courses()->syncWithoutDetaching($guestCourseIds);
+
+            $guestCart->delete();
+        } elseif ($userCart) {
+            $userCart->update(['session_id' => $newSessionId]);
+        }
+
+        RateLimiter::clear($this->throttleKey());
 
         $this->redirectIntended(default: route('home', absolute: false), navigate: true);
     }
