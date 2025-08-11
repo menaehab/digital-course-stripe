@@ -14,7 +14,7 @@
                                 {{ $course->description }}
                             </p>
                             <p class="my-2">
-                                ${{ $course->price / 100 }}
+                                {{ $course->price() }}
                             </p>
 
                             @if ($cart->courses->contains($course->id))

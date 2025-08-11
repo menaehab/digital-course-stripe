@@ -1,5 +1,6 @@
 <div class="flex h-full w-full flex-1 flex-col gap-4 rounded-xl">
     <h1 class="text-4xl text-center font-bold">Cart</h1>
+    <h1 class="text-3xl text-center font-bold">Total: {{ $cart->total() }}</h1>
     <div class="grid auto-rows-min gap-4 md:grid-cols-3">
         @if (count($cart->courses) > 0)
             @foreach ($cart->courses as $course)
@@ -15,7 +16,7 @@
                             {{ $course->description }}
                         </p>
                         <p class="my-2">
-                            ${{ $course->price / 100 }}
+                            {{ $course->price() }}
                         </p>
                         <a class="dark:bg-zinc-500 p-2 my-2 rounded-lg hover:bg-zinc-600 transition-colors"
                             href="#" wire:click="removeFromCart({{ $course->id }})">

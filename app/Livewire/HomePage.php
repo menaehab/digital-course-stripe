@@ -11,7 +11,7 @@ class HomePage extends Component
     public $cart;
     public function mount()
     {
-        $this->cart = Cart::where('session_id', session()->getId())->first();
+        $this->cart = Cart::session()->first();
     }
     public function addToCart($id)
     {
