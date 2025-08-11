@@ -18,7 +18,7 @@
                             </p>
 
                             <a class="dark:bg-zinc-500 p-2 my-2 rounded-lg hover:bg-zinc-600 transition-colors"
-                                href="#">
+                                href="#" wire:click="addToCart({{ $course->id }})">
                                 Add To Cart
                             </a>
                         </div>
