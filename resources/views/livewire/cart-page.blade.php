@@ -1,8 +1,8 @@
 <div class="flex h-full w-full flex-1 flex-col gap-4 rounded-xl">
+    <h1 class="text-4xl text-center font-bold">Cart</h1>
     <div class="grid auto-rows-min gap-4 md:grid-cols-3">
-        <h1 class="text-4xl text-center font-bold">Cart</h1>
-        @if (count($courses) > 0)
-            @foreach ($courses as $course)
+        @if (count($cart->courses) > 0)
+            @foreach ($cart->courses as $course)
                 <div
                     class="relative aspect-video overflow-hidden rounded-xl border border-neutral-200 dark:border-neutral-700">
                     <!-- Light mode -->
@@ -18,8 +18,8 @@
                             ${{ $course->price / 100 }}
                         </p>
                         <a class="dark:bg-zinc-500 p-2 my-2 rounded-lg hover:bg-zinc-600 transition-colors"
-                            href="#">
-                            Add To Cart
+                            href="#" wire:click="removeFromCart({{ $course->id }})">
+                            Remove
                         </a>
                     </div>
                 </div>

@@ -2,15 +2,22 @@
 
 namespace App\Livewire;
 
+use App\Models\Cart;
 use Livewire\Component;
 
 class CartPage extends Component
 {
-    public $courses;
+    public $cart;
     public function mount()
     {
-        $this->courses = session()->get('cart', []);
+        $this->cart = Cart::where('session_id', session()->getId())->first();
     }
+
+    public function removeFromCart($id)
+    {
+        $this->cart->courses()->detach($id);
+    }
+
     public function render()
     {
         return view('livewire.cart-page');

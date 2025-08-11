@@ -17,10 +17,17 @@
                                 ${{ $course->price / 100 }}
                             </p>
 
-                            <a class="dark:bg-zinc-500 p-2 my-2 rounded-lg hover:bg-zinc-600 transition-colors"
-                                href="#" wire:click="addToCart({{ $course->id }})">
-                                Add To Cart
-                            </a>
+                            @if ($cart->courses->contains($course->id))
+                                <a class="dark:bg-zinc-500 p-2 my-2 rounded-lg hover:bg-zinc-600 transition-colors"
+                                    href="#" wire:click="removeFromCart({{ $course->id }})">
+                                    Remove
+                                </a>
+                            @else
+                                <a class="dark:bg-zinc-500 p-2 my-2 rounded-lg hover:bg-zinc-600 transition-colors"
+                                    href="#" wire:click="addToCart({{ $course->id }})">
+                                    Add To Cart
+                                </a>
+                            @endif
                         </div>
                     </div>
                 @endforeach

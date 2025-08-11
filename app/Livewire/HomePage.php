@@ -8,6 +8,11 @@ use Livewire\Component;
 
 class HomePage extends Component
 {
+    public $cart;
+    public function mount()
+    {
+        $this->cart = Cart::where('session_id', session()->getId())->first();
+    }
     public function addToCart($id)
     {
         $course = Course::findOrFail($id);
@@ -16,6 +21,10 @@ class HomePage extends Component
         ]);
 
         $cart->courses()->syncWithoutDetaching($course->id);
+    }
+    public function removeFromCart($id)
+    {
+        $this->cart->courses()->detach($id);
     }
     public function render()
     {
