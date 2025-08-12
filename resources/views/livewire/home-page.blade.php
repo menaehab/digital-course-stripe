@@ -1,4 +1,9 @@
-    <div class="flex h-full w-full flex-1 flex-col gap-4 rounded-xl">
+    <div class="flex h-full text-center w-full flex-1 flex-col gap-4 rounded-xl">
+        @if (request('message'))
+            <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded" role="success">
+                {{ request('message') }}
+            </div>
+        @endif
         <div class="grid auto-rows-min gap-4 md:grid-cols-3">
             @if (count($courses) > 0)
                 @foreach ($courses as $course)

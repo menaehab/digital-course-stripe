@@ -14,6 +14,11 @@ class CheckoutController extends Controller
 
         $prices = $cart->courses->pluck('stripe_price_id')->toArray();
 
-        return auth()->user()->checkout($prices);
+        $sessionOption = [
+            'success_url' => route('home', ['message' => 'Course purchased successfully!']),
+            'cancel_url' => route('cart', ['message' => 'Course purchase cancelled!']),
+        ];
+
+        return auth()->user()->checkout($prices, $sessionOption);
     }
 }
