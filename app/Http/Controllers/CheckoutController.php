@@ -17,6 +17,13 @@ class CheckoutController extends Controller
         $sessionOption = [
             'success_url' => route('home', ['message' => 'Course purchased successfully!']),
             'cancel_url' => route('cart', ['message' => 'Course purchase cancelled!']),
+            'billing_address_collection' => 'required',
+            "phone_number_collection" => [
+                "enabled" => true,
+            ],
+            "payment_method_types" => [
+                "card"
+            ],
         ];
 
         return auth()->user()->checkout($prices, $sessionOption);
