@@ -24,8 +24,17 @@ class CheckoutController extends Controller
             "payment_method_types" => [
                 "card"
             ],
+            "metadata" => [
+                "cart_id" => $cart->id
+            ],
         ];
 
-        return auth()->user()->checkout($prices, $sessionOption);
+        $customerOption = [
+            "name" => auth()->user()->name,
+            "email" => auth()->user()->email,
+            "code" => 123456,
+        ];
+
+        return auth()->user()->checkout($prices, $sessionOption, $customerOption);
     }
 }
