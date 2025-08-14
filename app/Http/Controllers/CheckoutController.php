@@ -15,12 +15,12 @@ class CheckoutController extends Controller
         $prices = $cart->courses->pluck('stripe_price_id')->toArray();
 
         $sessionOption = [
-            'success_url' => route('home', ['message' => 'Course purchased successfully!']),
-            'cancel_url' => route('cart', ['message' => 'Course purchase cancelled!']),
-            'billing_address_collection' => 'required',
-            "phone_number_collection" => [
-                "enabled" => true,
-            ],
+            'success_url' => route('checkout.success') . '?session_id={CHECKOUT_SESSION_ID}',
+            'cancel_url' => route('checkout.cancel') . '?session_id={CHECKOUT_SESSION_ID}',
+            // 'billing_address_collection' => 'required',
+            // "phone_number_collection" => [
+            //     "enabled" => true,
+            // ],
             "payment_method_types" => [
                 "card"
             ],

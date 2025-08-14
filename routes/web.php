@@ -4,6 +4,8 @@ use Livewire\Volt\Volt;
 use App\Livewire\CartPage;
 use App\Livewire\HomePage;
 use App\Livewire\CourseShow;
+use App\Livewire\CancelPage;
+use App\Livewire\SuccessPage;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CheckoutController;
 
@@ -19,7 +21,11 @@ Route::get('/cart', CartPage::class)->name('cart');
 
 Route::middleware(['auth'])->group(function () {
 
-    Route::get('/checkout', [CheckoutController::class, 'checkout'])->name('checkout');
+    Route::prefix('checkout')->name('checkout.')->group(function () {
+        Route::get('/', [CheckoutController::class, 'checkout'])->name('index');
+        Route::get('/success', SuccessPage::class)->name('success');
+        Route::get('/cancel', CancelPage::class)->name('cancel');
+    });
     Route::redirect('settings', 'settings/profile');
 
     Volt::route('settings/profile', 'settings.profile')->name('settings.profile');

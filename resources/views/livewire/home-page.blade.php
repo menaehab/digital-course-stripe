@@ -1,6 +1,7 @@
     <div class="flex h-full text-center w-full flex-1 flex-col gap-4 rounded-xl">
         @if (request('message'))
-            <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded" role="success">
+            <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded" role="success"
+                wire:poll.5s>
                 {{ request('message') }}
             </div>
         @endif
