@@ -19,10 +19,12 @@ Route::get('/', HomePage::class)->name('home');
 Route::get('/course/{slug}', CourseShow::class)->name('course.show');
 Route::get('/cart', CartPage::class)->name('cart');
 
+
 Route::middleware(['auth'])->group(function () {
 
     Route::prefix('checkout')->name('checkout.')->group(function () {
         Route::get('/', [CheckoutController::class, 'checkout'])->name('index');
+        Route::get('/enable-coupon', [CheckoutController::class, 'enableCoupon'])->name('enable-coupon');
         Route::get('/success', SuccessPage::class)->name('success');
         Route::get('/cancel', CancelPage::class)->name('cancel');
     });
