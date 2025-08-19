@@ -64,4 +64,36 @@ class CheckoutController extends Controller
             ->withPromotionCode("promo_1RxPhnJ4WnQ1QxbC18QLWnWz")
             ->checkout($prices, $sessionOption);
     }
+
+    public function checkoutNonStripeProducts()
+    {
+        $cart = Cart::where('user_id', Auth::id())->first();
+
+        $prices = $cart->courses->sum('price');
+
+        $sessionOption = [
+            'success_url' => route('checkout.success') . '?session_id={CHECKOUT_SESSION_ID}',
+            'cancel_url' => route('checkout.cancel') . '?session_id={CHECKOUT_SESSION_ID}',
+            // 'billing_address_collection' => 'required',
+            // "phone_number_collection" => [
+            //     "enabled" => true,
+            // ],
+            "payment_method_types" => [
+                "card"
+            ],
+            "metadata" => [
+                "cart_id" => $cart->id
+            ],
+        ];
+
+        $customerOption = [
+            "name" => auth()->user()->name,
+            "email" => auth()->user()->email,
+            "code" => 123456,
+        ];
+
+        return auth()
+            ->user()
+            ->checkoutCharge($prices, 'courses bundles', 1, $sessionOption, $customerOption);
+    }
 }
