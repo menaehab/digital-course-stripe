@@ -36,5 +36,6 @@ Route::middleware(['auth'])->group(function () {
     Volt::route('settings/password', 'settings.password')->name('settings.password');
     Volt::route('settings/appearance', 'settings.appearance')->name('settings.appearance');
 });
+Route::get('/checkout/guest', [CheckoutController::class, 'guestCheckout'])->name('checkout.guest');
 
 require __DIR__ . '/auth.php';
