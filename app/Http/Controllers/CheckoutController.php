@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cart;
-use Illuminate\Http\Request;
+use Laravel\Cashier\Checkout;
 use Illuminate\Support\Facades\Auth;
 
 class CheckoutController extends Controller
@@ -63,5 +63,132 @@ class CheckoutController extends Controller
             ->user()
             ->withPromotionCode("promo_1RxPhnJ4WnQ1QxbC18QLWnWz")
             ->checkout($prices, $sessionOption);
+    }
+
+    public function checkoutNonStripeProducts()
+    {
+        $cart = Cart::where('user_id', Auth::id())->first();
+
+        $prices = $cart->courses->sum('price');
+
+        $sessionOption = [
+            'success_url' => route('checkout.success') . '?session_id={CHECKOUT_SESSION_ID}',
+            'cancel_url' => route('checkout.cancel') . '?session_id={CHECKOUT_SESSION_ID}',
+            // 'billing_address_collection' => 'required',
+            // "phone_number_collection" => [
+            //     "enabled" => true,
+            // ],
+            "payment_method_types" => [
+                "card"
+            ],
+            "metadata" => [
+                "cart_id" => $cart->id
+            ],
+        ];
+
+        $customerOption = [
+            "name" => auth()->user()->name,
+            "email" => auth()->user()->email,
+            "code" => 123456,
+        ];
+
+        return auth()
+            ->user()
+            ->checkoutCharge($prices, 'courses bundles', 1, $sessionOption, $customerOption);
+    }
+
+    public function lineItems()
+    {
+        $cart = Cart::where('user_id', Auth::id())->first();
+
+
+        $lineItems = [];
+
+        foreach ($cart->courses as $course) {
+            $lineItems[] = [
+                'price_data' => [
+                    'currency' => env('CASHIER_CURRENCY', 'usd'),
+                    'product_data' => ['name' => $course->name],
+                    'unit_amount' => $course->price,
+                ],
+                'quantity' => 1,
+                'adjustable_quantity' => [
+                    'enabled' => true,
+                    'maximum' => 1,
+                    'minimum' => 0,
+                ],
+            ];
+        }
+
+
+        $sessionOption = [
+            'success_url' => route('checkout.success') . '?session_id={CHECKOUT_SESSION_ID}',
+            'cancel_url' => route('checkout.cancel') . '?session_id={CHECKOUT_SESSION_ID}',
+            // 'billing_address_collection' => 'required',
+            // "phone_number_collection" => [
+            //     "enabled" => true,
+            // ],
+            "payment_method_types" => [
+                "card"
+            ],
+            "metadata" => [
+                "cart_id" => $cart->id
+            ],
+            'line_items' => $lineItems,
+        ];
+
+        $customerOption = [
+            "name" => auth()->user()->name,
+            "email" => auth()->user()->email,
+            "code" => 123456,
+        ];
+
+        return auth()
+            ->user()
+            ->checkout(null, $sessionOption, $customerOption);
+    }
+
+    public function guestCheckout()
+    {
+        $cart = Cart::where('user_id', Auth::id())->first();
+
+
+        $lineItems = [];
+
+        foreach ($cart->courses as $course) {
+            $lineItems[] = [
+                'price_data' => [
+                    'currency' => env('CASHIER_CURRENCY', 'usd'),
+                    'product_data' => ['name' => $course->name],
+                    'unit_amount' => $course->price,
+                ],
+                'quantity' => 1,
+                'adjustable_quantity' => [
+                    'enabled' => true,
+                    'maximum' => 1,
+                    'minimum' => 0,
+                ],
+            ];
+        }
+
+
+        $sessionOption = [
+            'success_url' => route('checkout.success') . '?session_id={CHECKOUT_SESSION_ID}',
+            'cancel_url' => route('checkout.cancel') . '?session_id={CHECKOUT_SESSION_ID}',
+            'payment_method_types' => ['card'],
+            'metadata' => [
+                'cart_id' => $cart->id,
+            ],
+            'mode' => 'payment',
+            'line_items' => $lineItems,
+        ];
+
+        // $customerOption = [
+        //     "name" => auth()->user()->name,
+        //     "email" => auth()->user()->email,
+        //     "code" => 123456,
+        // ];
+
+        return Checkout::guest()->create(null, $sessionOption);
     }
 }
