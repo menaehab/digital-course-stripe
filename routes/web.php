@@ -26,6 +26,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/', [CheckoutController::class, 'checkout'])->name('index');
         Route::get('/non-stripe-products', [CheckoutController::class, 'checkoutNonStripeProducts'])->name('non-stripe-products');
         Route::get('/enable-coupon', [CheckoutController::class, 'enableCoupon'])->name('enable-coupon');
+        Route::get('/line-items', [CheckoutController::class, 'lineItems'])->name('line-items');
         Route::get('/success', SuccessPage::class)->name('success');
         Route::get('/cancel', CancelPage::class)->name('cancel');
     });
