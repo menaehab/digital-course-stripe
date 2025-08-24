@@ -31,6 +31,10 @@
                 {{ __('Cart') }}
             </flux:navlist.item>
 
+            <flux:navlist.item icon="shopping-cart" :href="route('payment-method-checkout.index')"
+                :current="request()->routeIs('payment-method-checkout.index')" wire:navigate>
+                {{ __('Payment Method') }}
+            </flux:navlist.item>
             @guest
                 <flux:navlist.group :heading="__('Account')" class="grid">
                     <flux:navlist.item :href="route('login')" icon="arrow-right" wire:navigate>
@@ -157,6 +161,7 @@
 
     {{-- Page content --}}
     {{ $slot }}
+
 
     @fluxScripts
 </body>

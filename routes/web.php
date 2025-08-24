@@ -3,11 +3,13 @@
 use Livewire\Volt\Volt;
 use App\Livewire\CartPage;
 use App\Livewire\HomePage;
-use App\Livewire\CourseShow;
 use App\Livewire\CancelPage;
+use App\Livewire\CourseShow;
 use App\Livewire\SuccessPage;
+use App\Livewire\PaymentMethodPage;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\PaymentMethodCheckoutController;
 
 // Route::get('/', function () {
 //     return view('welcome');
@@ -21,7 +23,7 @@ Route::get('/cart', CartPage::class)->name('cart');
 
 
 Route::middleware(['auth'])->group(function () {
-
+    // checkout routes
     Route::prefix('checkout')->name('checkout.')->group(function () {
         Route::get('/', [CheckoutController::class, 'checkout'])->name('index');
         Route::get('/non-stripe-products', [CheckoutController::class, 'checkoutNonStripeProducts'])->name('non-stripe-products');
@@ -30,6 +32,14 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/success', SuccessPage::class)->name('success');
         Route::get('/cancel', CancelPage::class)->name('cancel');
     });
+
+
+    // direct integration -  payment method
+    Route::prefix('payment-method-checkout')->name('payment-method-checkout.')->group(function () {
+        Route::get('/', PaymentMethodPage::class)->name('index');
+        Route::post('/store', [PaymentMethodCheckoutController::class, 'store'])->name('store');
+    });
+
     Route::redirect('settings', 'settings/profile');
 
     Volt::route('settings/profile', 'settings.profile')->name('settings.profile');
