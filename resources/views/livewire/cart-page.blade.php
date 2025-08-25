@@ -11,6 +11,11 @@
         <a class="px-4 py-2 my-4 w-max mx-auto text-center rounded-lg bg-zinc-900 text-neutral-200 hover:bg-zinc-600 transition-colors"
             href="{{ route('checkout.guest') }}">Check Out</a>
 
+        @if (auth()->user()->hasDefaultPaymentMethod())
+            <a class="px-4 py-2 my-4 w-max mx-auto text-center rounded-lg bg-zinc-900 text-neutral-200 hover:bg-zinc-600 transition-colors"
+                href="{{ route('payment-method-checkout.one-click') }}">One Click Check Out</a>
+        @endif
+
         <div class="grid auto-rows-min gap-4 md:grid-cols-3">
             @foreach ($cart->courses as $course)
                 <div

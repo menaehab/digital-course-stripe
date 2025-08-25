@@ -38,6 +38,7 @@ Route::middleware(['auth'])->group(function () {
     Route::prefix('payment-method-checkout')->name('payment-method-checkout.')->group(function () {
         Route::get('/', PaymentMethodPage::class)->name('index');
         Route::post('/store', [PaymentMethodCheckoutController::class, 'store'])->name('store');
+        Route::get('/one-click', [PaymentMethodCheckoutController::class, 'oneClick'])->middleware('ProtectOneClicKCheckout')->name('one-click');
     });
 
     Route::redirect('settings', 'settings/profile');

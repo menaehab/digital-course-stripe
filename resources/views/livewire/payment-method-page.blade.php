@@ -12,6 +12,7 @@
             class="rounded-xl bg-emerald-600 px-5 py-3 text-sm font-semibold text-white shadow transition hover:bg-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-400 disabled:cursor-not-allowed disabled:opacity-60">
             Process Payment
         </button>
+
     </form>
 
     <script>
