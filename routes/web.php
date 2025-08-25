@@ -1,5 +1,6 @@
 <?php
 
+use App\Livewire\PaymentIntentPage;
 use Livewire\Volt\Volt;
 use App\Livewire\CartPage;
 use App\Livewire\HomePage;
@@ -9,6 +10,7 @@ use App\Livewire\SuccessPage;
 use App\Livewire\PaymentMethodPage;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\PaymentIntentController;
 use App\Http\Controllers\PaymentMethodCheckoutController;
 
 // Route::get('/', function () {
@@ -39,6 +41,12 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/', PaymentMethodPage::class)->name('index');
         Route::post('/store', [PaymentMethodCheckoutController::class, 'store'])->name('store');
         Route::get('/one-click', [PaymentMethodCheckoutController::class, 'oneClick'])->middleware('ProtectOneClicKCheckout')->name('one-click');
+    });
+
+    // payment intent
+    Route::prefix('payment-intent')->name('payment-intent.')->group(function () {
+        Route::get('/', PaymentIntentPage::class)->name('index');
+        Route::post('/store', [PaymentIntentController::class, 'store'])->name('store');
     });
 
     Route::redirect('settings', 'settings/profile');
