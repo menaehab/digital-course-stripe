@@ -15,6 +15,16 @@ class PaymentMethodCheckoutController extends Controller
             'payment_method' => 'required',
         ]);
 
+        $user = auth()->user();
+
+        if (!$user->hasStripeId()) {
+            $user->createAsStripeCustomer();
+        }
+
+        if ($request->payment_method) {
+            auth()->user()->addPaymentMethod($request->payment_method);
+        }
+
         $cart = Cart::where('user_id', Auth::id())->first();
 
         $amount = $cart->courses->sum('price');
