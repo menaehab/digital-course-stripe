@@ -1,15 +1,17 @@
 <?php
 
-use App\Livewire\PaymentIntentPage;
 use Livewire\Volt\Volt;
 use App\Livewire\CartPage;
 use App\Livewire\HomePage;
 use App\Livewire\CancelPage;
 use App\Livewire\CourseShow;
 use App\Livewire\SuccessPage;
+use App\Livewire\SetupIntentPage;
+use App\Livewire\PaymentIntentPage;
 use App\Livewire\PaymentMethodPage;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\SetupIntentController;
 use App\Http\Controllers\PaymentIntentController;
 use App\Http\Controllers\PaymentMethodCheckoutController;
 
@@ -47,6 +49,12 @@ Route::middleware(['auth'])->group(function () {
     Route::prefix('payment-intent')->name('payment-intent.')->group(function () {
         Route::get('/', PaymentIntentPage::class)->name('index');
         Route::post('/store', [PaymentIntentController::class, 'store'])->name('store');
+    });
+
+    // setup intent
+    Route::prefix('setup-intent')->name('setup-intent.')->group(function () {
+        Route::get('/', SetupIntentPage::class)->name('index');
+        Route::post('/store', [SetupIntentController::class, 'store'])->name('store');
     });
 
     Route::redirect('settings', 'settings/profile');

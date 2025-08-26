@@ -17,6 +17,7 @@ class PaymentIntentPage extends Component
             ->courses
             ->sum('price');
 
+
         $payment = auth()->user()->pay($amount);
 
         return view('livewire.payment-intent-page', compact('payment'));
