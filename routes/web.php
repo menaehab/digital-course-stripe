@@ -10,6 +10,7 @@ use App\Livewire\SetupIntentPage;
 use App\Livewire\PaymentIntentPage;
 use App\Livewire\PaymentMethodPage;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\WebhookController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\SetupIntentController;
 use App\Http\Controllers\PaymentIntentController;
@@ -63,6 +64,8 @@ Route::middleware(['auth'])->group(function () {
     Volt::route('settings/password', 'settings.password')->name('settings.password');
     Volt::route('settings/appearance', 'settings.appearance')->name('settings.appearance');
 });
+
+Route::post('/stripe/webhook', [WebhookController::class, 'handleChargeSucceeded'])->name('webhook');
 Route::get('/checkout/guest', [CheckoutController::class, 'guestCheckout'])->name('checkout.guest');
 
 require __DIR__ . '/auth.php';
